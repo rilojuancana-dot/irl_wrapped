@@ -20,7 +20,7 @@ Sigue estos pasos en orden para ejecutar la aplicación
 
 Abre una terminal y ejecuta:
 
-git clone https://github.com/rilojuancana-dot/irl-wrapped.git
+git clone [https://github.com/rilojuancana-dot/irl-wrapped.git](https://github.com/rilojuancana-dot/irl_wrapped.git)
 
 ### 2. Abrir el proyecto en Android Studio
 
