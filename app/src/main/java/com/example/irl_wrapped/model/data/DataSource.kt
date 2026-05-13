@@ -23,6 +23,11 @@ object DataSource {
         Emoji(3, "\uD83C\uDFC0"), // 🏀
         Emoji(4, "\uD83C\uDFB8")  // 🎸
     )
+    val lugares = listOf(
+        Lugar(1, "Madrid"),
+        Lugar(2, "Paris"),
+        Lugar(3, "Londres")
+    )
 
     val recuerdos = listOf(
         Recuerdo(
@@ -31,7 +36,9 @@ object DataSource {
             descripcion = "Visitamos el Coliseo y comimos mucha pasta.",
             tema = temas[0],
             emoji = emojis[0],
-            personas = listOf(personas[0], personas[1])
+            personas = listOf(personas[0], personas[1]),
+            imagen = "https://picsum.photos/1080/920",
+            lugar = lugares[0]
         ),
         Recuerdo(
             id = 2,
@@ -39,7 +46,9 @@ object DataSource {
             descripcion = "Increíble noche con música en directo.",
             tema = temas[3],
             emoji = emojis[3],
-            personas = listOf(personas[2], personas[3])
+            personas = listOf(personas[2], personas[3]),
+            lugar = lugares[1]
+
         ),
         Recuerdo(
             id = 3,
@@ -47,7 +56,9 @@ object DataSource {
             descripcion = "Pizza deliciosa con amigos.",
             tema = temas[1],
             emoji = emojis[1],
-            personas = personas
+            personas = personas,
+            lugar = lugares[2]
+
         )
     )
 
