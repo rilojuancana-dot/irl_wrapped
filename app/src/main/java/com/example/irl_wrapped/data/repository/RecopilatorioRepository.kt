@@ -28,19 +28,19 @@ class RecopilatorioRepository(
         return apiService.getRecopilatorioRecuerdos(id)
     }
     
-    suspend fun getTemaFrecuencia(id: Long): Map<Tema, Int> {
+    suspend fun getTemaFrecuencia(id: Long): Map<String, Int> {
         return apiService.getTemaFrecuencia(id)
     }
     
-    suspend fun getEmojiFrecuencia(id: Long): Map<Emoji, Int> {
+    suspend fun getEmojiFrecuencia(id: Long): Map<String, Int> {
         return apiService.getEmojiFrecuencia(id)
     }
     
-    suspend fun getPersonaFrecuencia(id: Long): Map<Persona, Int> {
+    suspend fun getPersonaFrecuencia(id: Long): Map<String, Int> {
         return apiService.getPersonaFrecuencia(id)
     }
     
-    suspend fun getLugarFrecuencia(id: Long): Map<Lugar, Int> {
+    suspend fun getLugarFrecuencia(id: Long): Map<String, Int> {
         return apiService.getLugarFrecuencia(id)
     }
 

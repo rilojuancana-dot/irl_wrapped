@@ -27,7 +27,7 @@ import com.example.irl_wrapped.ui.view.components.ClickableCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecuerdoList(recuerdos: List<Recuerdo>, recopilatorioNombre: String,  onRecuerdoClick: (Long) -> Unit) {
+fun RecuerdoList(recuerdos: List<Recuerdo>, recopilatorioNombre: String,  onRecuerdoClick: (Long) -> Unit, modoEliminar: Boolean = false, onEliminar: (Long) -> Unit = {}, onBack: () -> Unit) {
     val cardHeight = LocalConfiguration.current.screenHeightDp.dp / 6
 
     Scaffold(
@@ -49,7 +49,13 @@ fun RecuerdoList(recuerdos: List<Recuerdo>, recopilatorioNombre: String,  onRecu
             items(recuerdos){recuerdo->
                 ClickableCard(
                     text = recuerdo.name + "\n \n" + recuerdo.descripcion,
-                    onClick = {onRecuerdoClick(recuerdo.id)},
+                    onClick = {
+                        if (modoEliminar) {
+                            onEliminar(recuerdo.id)
+                            onBack()
+                        }
+                        else {onRecuerdoClick(recuerdo.id)}
+                    },
                     modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp)
                         .wrapContentHeight()
                 )

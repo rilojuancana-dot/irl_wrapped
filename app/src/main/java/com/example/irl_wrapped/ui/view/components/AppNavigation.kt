@@ -32,6 +32,8 @@ import com.example.irl_wrapped.viewmodel.CameraUiState
 import com.example.irl_wrapped.viewmodel.CameraViewModel
 import com.example.irl_wrapped.viewmodel.RecopilatoriosViewModel
 import androidx.core.graphics.createBitmap
+import com.example.irl_wrapped.model.Recopilatorio
+import com.example.irl_wrapped.ui.view.EstadisticasPage
 
 @Composable
 fun AppNavigation(modifier: Modifier = Modifier){
@@ -76,7 +78,9 @@ fun AppNavigation(modifier: Modifier = Modifier){
                     RecopilatorioPage(
                         recopilatorio = recopilatorio,
                         onNavigateToRecuerdoList = { navController.navigate("recuerdo_list/$id") },
-                        onNavigateToCameraScreen = {navController.navigate("camera_screen/${id}")}
+                        onNavigateToDeleteList = { navController.navigate("recuerdo_list/$id/eliminar") },
+                        onNavigateToCameraScreen = {navController.navigate("camera_screen/${id}")},
+                        onNavigateToStats = {navController.navigate("stats/${id}")}
                     )
                 } else {
                     Text("Error: Recopilatorio no encontrado")
@@ -96,7 +100,34 @@ fun AppNavigation(modifier: Modifier = Modifier){
                         recopilatorioNombre = recopilatorio.name,
                         onRecuerdoClick = { recuerdoId ->
                             navController.navigate("recuerdo_page/$recopilatorioId/$recuerdoId")
-                        }
+                        },
+                        onEliminar = {recuerdoId ->
+                          recopilatoriosViewModeliewModel.eliminarRecuerdo(recuerdoId, recopilatorioId)
+                        },
+                        onBack = {navController.popBackStack()}
+                    )
+                }
+            }
+            composable(
+                route = "recuerdo_list/{recopilatorioId}/eliminar",
+                arguments = listOf(navArgument("recopilatorioId") { type = NavType.LongType })
+            ) { backStackEntry ->
+                val recopilatorioId = backStackEntry.arguments?.getLong("recopilatorioId") ?: 0L
+                val recopilatorio = recopilatoriosViewModeliewModel.getRecopilatorioPorId(recopilatorioId)
+
+                if (recopilatorio != null) {
+                    RecuerdoList(
+                        recuerdos = recopilatorio.recuerdos,
+                        recopilatorioNombre = recopilatorio.name,
+                        onRecuerdoClick = { recuerdoId ->
+                            navController.navigate("recuerdo_page/$recopilatorioId/$recuerdoId")
+                        },
+                        onEliminar = {recuerdoId ->
+                            recopilatoriosViewModeliewModel.eliminarRecuerdo(recuerdoId, recopilatorioId)
+                        },
+                        modoEliminar = true,
+                        onBack = {navController.navigate("main_page")}
+
                     )
                 }
             }
@@ -164,6 +195,31 @@ fun AppNavigation(modifier: Modifier = Modifier){
                     onClear = {cameraViewModel.clearCapturedImage()},
                     onSavePhoto = { navController.navigate("recuerdo_page/${backStackEntry.arguments?.getLong("id")?:0L}/${0}")},
                     onNavigateBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(
+                route = "stats/{id}",
+                arguments = listOf(navArgument("id"){type = NavType.LongType})
+            ) { backStackEntry ->
+                val recopilatorioId = backStackEntry.arguments?.getLong("id") ?: 0L
+                val recopilatorio = recopilatoriosViewModeliewModel.getRecopilatorioPorId(recopilatorioId)?: Recopilatorio(
+                    0,
+                    "",
+                    emptyList()
+                )
+                recopilatoriosViewModeliewModel.getRecopilatorioTemaFrecuencia(recopilatorioId)
+                recopilatoriosViewModeliewModel.getRecopilatorioLugarFrecuencia(recopilatorioId)
+                recopilatoriosViewModeliewModel.getRecopilatorioEmojiFrecuencia(recopilatorioId)
+                recopilatoriosViewModeliewModel.getRecopilatorioPersonaFrecuencia(recopilatorioId)
+                EstadisticasPage(
+                    recopilatorio,
+                    recopilatoriosViewModeliewModel.temaFrecuencia.value?:emptyMap(),
+                    recopilatoriosViewModeliewModel.lugarFrecuencia.value?:emptyMap(),
+                    recopilatoriosViewModeliewModel.emojiFrecuencia.value?:emptyMap(),
+                    recopilatoriosViewModeliewModel.personaFrecuencia.value?:emptyMap(),
+                    onBack = { navController.popBackStack() }
+
                 )
             }
         }

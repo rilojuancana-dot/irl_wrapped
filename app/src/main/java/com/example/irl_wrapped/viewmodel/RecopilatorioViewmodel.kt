@@ -14,8 +14,12 @@ import com.example.irl_wrapped.data.repository.RecopilatorioRepository
 import com.example.irl_wrapped.data.repository.RecuerdoRepository
 import com.example.irl_wrapped.data.repository.UsuarioRepository
 import com.example.irl_wrapped.data.services.RetrofitImpl
+import com.example.irl_wrapped.model.Emoji
+import com.example.irl_wrapped.model.Lugar
+import com.example.irl_wrapped.model.Persona
 import com.example.irl_wrapped.model.Recopilatorio
 import com.example.irl_wrapped.model.Recuerdo
+import com.example.irl_wrapped.model.Tema
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -41,6 +45,18 @@ class RecopilatoriosViewModel(
 
     private val _uiState = MutableStateFlow<RecopilatoriosUiState>(RecopilatoriosUiState.Loading)
     val uiState = _uiState.asStateFlow()
+
+    private val _temaFrecuencia = MutableStateFlow<Map<String, Int>?>(null)
+    val temaFrecuencia= _temaFrecuencia.asStateFlow()
+
+    private val _lugarFrecuencia = MutableStateFlow<Map<String, Int>?>(null)
+    val lugarFrecuencia= _lugarFrecuencia.asStateFlow()
+
+    private val _emojiFrecuencia = MutableStateFlow<Map<String, Int>?>(null)
+    val emojiFrecuencia= _emojiFrecuencia.asStateFlow()
+
+    private val _personaFrecuencia = MutableStateFlow<Map<String, Int>?>(null)
+    val personaFrecuencia= _personaFrecuencia.asStateFlow()
 
     private val recuerdosCache = mutableMapOf<Long, List<Recuerdo>>()
 
@@ -202,11 +218,21 @@ class RecopilatoriosViewModel(
                 }
 
                 _uiState.update { currentState ->
+
                     if (currentState is RecopilatoriosUiState.Success) {
+                        val recopilatoriosActualizado = currentState.recopilatorios.map { recopilatorio ->
+                            if (recopilatorio.id == recopilatorioId) {
+                                recopilatorio.copy(recuerdos = recuerdosActuales)
+                            } else {
+                                recopilatorio
+                            }
+                        }
                         val nuevosRecuerdosMap = currentState.recuerdosPorRecopilatorio.toMutableMap()
                         nuevosRecuerdosMap[recopilatorioId] = recuerdosCache[recopilatorioId] ?: emptyList()
 
-                        currentState.copy(recuerdosPorRecopilatorio = nuevosRecuerdosMap)
+                        currentState.copy(
+                            recopilatorios = recopilatoriosActualizado,recuerdosPorRecopilatorio = nuevosRecuerdosMap
+                        )
                     } else {
                         currentState
                     }
@@ -227,10 +253,17 @@ class RecopilatoriosViewModel(
 
                     _uiState.update { currentState ->
                         if (currentState is RecopilatoriosUiState.Success) {
+                            val recopilatoriosActualizado = currentState.recopilatorios.map { recopilatorio ->
+                                if (recopilatorio.id == recopilatorioId) {
+                                    recopilatorio.copy(recuerdos = recuerdosActuales)
+                                } else {
+                                    recopilatorio
+                                }
+                            }
                             val nuevosRecuerdosMap = currentState.recuerdosPorRecopilatorio.toMutableMap()
                             nuevosRecuerdosMap[recopilatorioId] = recuerdosCache[recopilatorioId] ?: emptyList()
 
-                            currentState.copy(recuerdosPorRecopilatorio = nuevosRecuerdosMap)
+                            currentState.copy(recopilatorios = recopilatoriosActualizado, recuerdosPorRecopilatorio = nuevosRecuerdosMap)
                         } else {
                             currentState
                         }
@@ -275,6 +308,30 @@ class RecopilatoriosViewModel(
             state.recopilatorios.find { it.id == id }
         } else {
             null
+        }
+    }
+
+    fun getRecopilatorioTemaFrecuencia(idRecopilatorio: Long) {
+        viewModelScope.launch {
+            _temaFrecuencia.value = recopilatorioRepository.getTemaFrecuencia(idRecopilatorio)
+        }
+    }
+
+    fun getRecopilatorioEmojiFrecuencia(idRecopilatorio: Long) {
+        viewModelScope.launch {
+            _emojiFrecuencia.value = recopilatorioRepository.getEmojiFrecuencia(idRecopilatorio)
+        }
+    }
+
+    fun getRecopilatorioLugarFrecuencia(idRecopilatorio: Long) {
+        viewModelScope.launch {
+            _lugarFrecuencia.value = recopilatorioRepository.getLugarFrecuencia(idRecopilatorio)
+        }
+    }
+
+    fun getRecopilatorioPersonaFrecuencia(idRecopilatorio: Long) {
+        viewModelScope.launch {
+            _personaFrecuencia.value = recopilatorioRepository.getPersonaFrecuencia(idRecopilatorio)
         }
     }
 
