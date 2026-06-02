@@ -22,7 +22,7 @@ import com.example.irl_wrapped.ui.view.components.ClickableCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecopilatorioPage(recopilatorio: Recopilatorio){
+fun RecopilatorioPage(recopilatorio: Recopilatorio, onNavigateToRecuerdoList: (Long) -> Unit, onNavigateToCameraScreen: () -> Unit ){
     Scaffold(
         topBar = {
             TopAppBar(
@@ -32,7 +32,7 @@ fun RecopilatorioPage(recopilatorio: Recopilatorio){
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.fillMaxWidth().fillMaxHeight()
                     ){
-                        Text(text = recopilatorio.nombre, style = MaterialTheme.typography.headlineLarge,)
+                        Text(text = recopilatorio.name, style = MaterialTheme.typography.headlineLarge,)
                     }
                 },
             )
@@ -41,25 +41,25 @@ fun RecopilatorioPage(recopilatorio: Recopilatorio){
         Column(modifier = Modifier.padding(contentPadding).fillMaxHeight(1f)) {
             ClickableCard(
                 text = "Añadir nuevo recuerdo",
-                onClick = {},
+                onClick = {onNavigateToCameraScreen()},
                 modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp).fillMaxWidth(1f)
                     .weight(1f)
             )
             ClickableCard(
                 text = "Modificar recuerdo antiguo",
-                onClick = {},
+                onClick = {onNavigateToRecuerdoList(recopilatorio.id)},
                 modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp).fillMaxWidth(1f)
                     .weight(1f)
             )
             ClickableCard(
                 text = "Borrar recuerdo antiguo",
-                onClick = {},
+                onClick = {onNavigateToRecuerdoList(recopilatorio.id)},
                 modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp).fillMaxWidth(1f)
                     .weight(1f)
             )
             ClickableCard(
                 text = "Generar estadísticas",
-                onClick = {},
+                onClick = {onNavigateToRecuerdoList(recopilatorio.id)},
                 modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp).fillMaxWidth(1f)
                     .weight(1f)
             )
@@ -69,7 +69,7 @@ fun RecopilatorioPage(recopilatorio: Recopilatorio){
 @Preview(showBackground = true)
 @Composable
 fun RecopilatorioPagePreview(){
-    RecopilatorioPage(DataSource.recopilatorios[0])
+    //RecopilatorioPage(DataSource.recopilatorios[0])
 }
 
 

@@ -4,6 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Tema(
-    val id: Int,
-    val nombre: String
+    val name: String
 )

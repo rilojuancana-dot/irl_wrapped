@@ -27,7 +27,7 @@ import com.example.irl_wrapped.ui.view.components.ClickableCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecuerdoList(recuerdos: List<Recuerdo>, recopilatorioNombre: String) {
+fun RecuerdoList(recuerdos: List<Recuerdo>, recopilatorioNombre: String,  onRecuerdoClick: (Long) -> Unit) {
     val cardHeight = LocalConfiguration.current.screenHeightDp.dp / 6
 
     Scaffold(
@@ -48,8 +48,8 @@ fun RecuerdoList(recuerdos: List<Recuerdo>, recopilatorioNombre: String) {
         LazyColumn (contentPadding = contentPadding, modifier = Modifier.fillMaxHeight(1f)){
             items(recuerdos){recuerdo->
                 ClickableCard(
-                    text = recuerdo.nombre + "\n \n" + recuerdo.descripcion,
-                    onClick = {},
+                    text = recuerdo.name + "\n \n" + recuerdo.descripcion,
+                    onClick = {onRecuerdoClick(recuerdo.id)},
                     modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp)
                         .wrapContentHeight()
                 )
@@ -61,5 +61,5 @@ fun RecuerdoList(recuerdos: List<Recuerdo>, recopilatorioNombre: String) {
 @Preview(showBackground = true)
 @Composable
 fun RecuerdoListPreview(){
-    RecuerdoList(DataSource.recopilatorios[0].recuerdos, DataSource.recopilatorios[0].nombre)
+    //RecuerdoList(DataSource.recopilatorios[0].recuerdos, DataSource.recopilatorios[0].name)
 }
