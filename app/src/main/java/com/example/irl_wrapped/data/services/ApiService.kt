@@ -55,16 +55,16 @@ interface ApiService {
     suspend fun getRecopilatorioRecuerdos(@Path("id") id: Long): List<Recuerdo>
 
     @GET("api/recopilatorios/{id}/estadisticas/temas")
-    suspend fun getTemaFrecuencia(@Path("id") id: Long): Map<Tema, Int>
+    suspend fun getTemaFrecuencia(@Path("id") id: Long): Map<String, Int>
 
     @GET("api/recopilatorios/{id}/estadisticas/emojis")
-    suspend fun getEmojiFrecuencia(@Path("id") id: Long): Map<Emoji, Int>
+    suspend fun getEmojiFrecuencia(@Path("id") id: Long): Map<String, Int>
 
     @GET("api/recopilatorios/{id}/estadisticas/personas")
-    suspend fun getPersonaFrecuencia(@Path("id") id: Long): Map<Persona, Int>
+    suspend fun getPersonaFrecuencia(@Path("id") id: Long): Map<String, Int>
 
     @GET("api/recopilatorios/{id}/estadisticas/lugares")
-    suspend fun getLugarFrecuencia(@Path("id") id: Long): Map<Lugar, Int>
+    suspend fun getLugarFrecuencia(@Path("id") id: Long): Map<String, Int>
 
     @POST("api/recuerdos")
     suspend fun crearRecuerdo(

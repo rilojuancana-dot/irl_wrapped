@@ -22,7 +22,8 @@ import com.example.irl_wrapped.ui.view.components.ClickableCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecopilatorioPage(recopilatorio: Recopilatorio, onNavigateToRecuerdoList: (Long) -> Unit, onNavigateToCameraScreen: () -> Unit ){
+fun RecopilatorioPage(recopilatorio: Recopilatorio, onNavigateToRecuerdoList: (Long) -> Unit, onNavigateToCameraScreen: () -> Unit,
+                      onNavigateToStats: () -> Unit, onNavigateToDeleteList: (Long) ->Unit){
     Scaffold(
         topBar = {
             TopAppBar(
@@ -53,13 +54,13 @@ fun RecopilatorioPage(recopilatorio: Recopilatorio, onNavigateToRecuerdoList: (L
             )
             ClickableCard(
                 text = "Borrar recuerdo antiguo",
-                onClick = {onNavigateToRecuerdoList(recopilatorio.id)},
+                onClick = {onNavigateToDeleteList(recopilatorio.id)},
                 modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp).fillMaxWidth(1f)
                     .weight(1f)
             )
             ClickableCard(
                 text = "Generar estadísticas",
-                onClick = {onNavigateToRecuerdoList(recopilatorio.id)},
+                onClick = {onNavigateToStats()},
                 modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp).fillMaxWidth(1f)
                     .weight(1f)
             )
