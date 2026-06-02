@@ -4,6 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Lugar (
-    val id:Int,
-    val nombre: String,
+    val name: String,
 )

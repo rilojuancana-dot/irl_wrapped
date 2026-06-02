@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 android {
@@ -42,6 +43,17 @@ android {
 }
 
 dependencies {
+    // CameraX con soporte nativo para Compose
+    val camerax_version = "1.6.1"
+    implementation("androidx.camera:camera-core:$camerax_version")
+    implementation("androidx.camera:camera-camera2:$camerax_version")
+    implementation("androidx.camera:camera-lifecycle:$camerax_version")
+
+    // 👇 La clave está aquí: librería nativa de Compose
+    implementation("androidx.camera:camera-compose:$camerax_version")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0")
+    implementation("androidx.navigation:navigation-compose:2.9.8")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -54,7 +66,8 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+    implementation("com.squareup.retrofit2:converter-kotlinx-serialization:2.11.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

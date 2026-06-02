@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Recopilatorio(
-    val id: Int,
-    val nombre: String,
+    val id: Long,
+    val name: String,
     val recuerdos: List<Recuerdo>
 )
