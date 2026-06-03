@@ -39,7 +39,7 @@ import com.example.irl_wrapped.viewmodel.RecopilatoriosViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainPage(uiState: RecopilatoriosUiState, modifier: Modifier = Modifier, onNavigateToRecopilatorio: (Long) -> Unit = {}, ){
+fun MainPage(uiState: RecopilatoriosUiState, modifier: Modifier = Modifier, onNavigateToRecopilatorio: (Long) -> Unit = {}, onNavigateToCreating: () -> Unit = {} ){
 
 
 
@@ -57,7 +57,7 @@ fun MainPage(uiState: RecopilatoriosUiState, modifier: Modifier = Modifier, onNa
                 },
                 floatingActionButton = {
                     FloatingActionButton(
-                        onClick = {},
+                        onClick = {onNavigateToCreating()},
                         modifier = Modifier.padding(16.dp),
                     ) {
                         Icon(

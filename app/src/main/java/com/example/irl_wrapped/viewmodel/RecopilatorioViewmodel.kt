@@ -108,68 +108,6 @@ class RecopilatoriosViewModel(
             }
         }
     }
-
-    fun actualizarRecopilatorio(id: Int, nuevoNombre: String) {
-        viewModelScope.launch {
-            try {
-                val actualizado = recopilatorioRepository.actualizarRecopilatorio(id, nuevoNombre)
-
-                _uiState.update { currentState ->
-                    if (currentState is RecopilatoriosUiState.Success) {
-                        val nuevosRecopilatorios = currentState.recopilatorios.map {
-                            if (it.id == actualizado.id) actualizado else it
-                        }
-                        currentState.copy(recopilatorios = nuevosRecopilatorios)
-                    } else {
-                        currentState
-                    }
-                }
-            } catch (e: Exception) {
-                _uiState.value = RecopilatoriosUiState.Error("Error al actualizar: ${e.message}")
-            }
-        }
-    }
-
-    fun eliminarRecopilatorio(id: Long) {
-        viewModelScope.launch {
-            try {
-                val success = recopilatorioRepository.eliminarRecopilatorio(id)
-                if (success) {
-                    _uiState.update { currentState ->
-                        if (currentState is RecopilatoriosUiState.Success) {
-                            val nuevosRecopilatorios = currentState.recopilatorios.filter { it.id != id }
-                            val nuevosRecuerdosMap = currentState.recuerdosPorRecopilatorio.toMutableMap()
-                            nuevosRecuerdosMap.remove(id)
-                            recuerdosCache.remove(id)
-
-                            currentState.copy(
-                                recopilatorios = nuevosRecopilatorios,
-                                recuerdosPorRecopilatorio = nuevosRecuerdosMap,
-                                recopilatorioSeleccionado = if (currentState.recopilatorioSeleccionado?.id == id) null
-                                else currentState.recopilatorioSeleccionado
-                            )
-                        } else {
-                            currentState
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                _uiState.value = RecopilatoriosUiState.Error("Error al eliminar: ${e.message}")
-            }
-        }
-    }
-
-    fun seleccionarRecopilatorio(recopilatorio: Recopilatorio?) {
-        _uiState.update { currentState ->
-            if (currentState is RecopilatoriosUiState.Success) {
-                currentState.copy(recopilatorioSeleccionado = recopilatorio)
-            } else {
-                currentState
-            }
-        }
-    }
-
-
     fun crearRecuerdo(recuerdo: Recuerdo, recopilatorioId: Long) {
         viewModelScope.launch {
             try {
@@ -281,28 +219,6 @@ class RecopilatoriosViewModel(
                 }
             } catch (e: Exception) {
                 _uiState.value = RecopilatoriosUiState.Error("Error al eliminar recuerdo: ${e.message}")
-            }
-        }
-    }
-
-    fun recargarRecuerdosDeRecopilatorio(recopilatorioId: Long) {
-        viewModelScope.launch {
-            try {
-                val recuerdos = recopilatorioRepository.getRecopilatorioRecuerdos(recopilatorioId)
-                recuerdosCache[recopilatorioId] = recuerdos
-
-                _uiState.update { currentState ->
-                    if (currentState is RecopilatoriosUiState.Success) {
-                        val nuevosRecuerdosMap = currentState.recuerdosPorRecopilatorio.toMutableMap()
-                        nuevosRecuerdosMap[recopilatorioId] = recuerdos
-
-                        currentState.copy(recuerdosPorRecopilatorio = nuevosRecuerdosMap)
-                    } else {
-                        currentState
-                    }
-                }
-            } catch (e: Exception) {
-                _uiState.value = RecopilatoriosUiState.Error("Error al recargar recuerdos: ${e.message}")
             }
         }
     }

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -149,13 +150,13 @@ fun BarChart(
         actualData = data.subList(0, 4)
     }
 
-
     Column(modifier = modifier) {
         Canvas(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp)
         ) {
+
             val barWidth = size.width / actualData.size
             val spacing = barWidth * 0.2f
             val actualBarWidth = barWidth - spacing
@@ -215,3 +216,14 @@ fun CustomCard(texto :String){
     }
 }
 
+@Composable
+fun StatsError(onBack : () -> Unit){
+    Column (
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ){
+        Text("No hay datos para generar estadísticas")
+        Button(onClick = {onBack()}) {Text( "Volver") }
+    }
+}
