@@ -63,7 +63,7 @@ fun CameraPage(cameraUiState: CameraUiState, surfaceRequestState: StateFlow<Surf
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Button(onClick = onNavigateBack) {
+                Button(onClick = {onNavigateBack()}) {
                     Text("Cancelar")
                 }
 

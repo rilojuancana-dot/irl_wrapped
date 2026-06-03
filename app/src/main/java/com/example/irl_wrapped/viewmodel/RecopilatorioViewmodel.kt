@@ -177,10 +177,8 @@ class RecopilatoriosViewModel(
                     recuerdoRepository.crearRecuerdo(recuerdo, recopilatorioId)
                 }
                 val nuevoRecuerdo = nuevoRecuerdoAsync.await()
-                Log.d("RecopilatoriosViewModel", "========================Nuevo Recuerdo: $nuevoRecuerdo")
                 val recuerdosActuales = recuerdosCache[recopilatorioId]?.toMutableList() ?: mutableListOf()
                 recuerdosActuales.add(nuevoRecuerdo)
-                Log.d("RecopilatoriosViewModel", "========================Recuerdos actuales: ${recuerdosActuales.joinToString { it.name }}")
                 recuerdosCache[recopilatorioId] = recuerdosActuales
 
                 _uiState.update { currentState ->
@@ -210,28 +208,37 @@ class RecopilatoriosViewModel(
     fun actualizarRecuerdo(id: Long, recuerdo: Recuerdo, recopilatorioId: Long) {
         viewModelScope.launch {
             try {
-                val actualizado = recuerdoRepository.actualizarRecuerdo(id, recuerdo)
+                val actualizadoAsync = async{
+                    recuerdoRepository.actualizarRecuerdo(id, recuerdo)
+                }
+                val actualizado = actualizadoAsync.await()
 
                 val recuerdosActuales = recuerdosCache[recopilatorioId] ?: emptyList()
                 recuerdosCache[recopilatorioId] = recuerdosActuales.map {
                     if (it.id == actualizado.id) actualizado else it
                 }
 
+
                 _uiState.update { currentState ->
 
                     if (currentState is RecopilatoriosUiState.Success) {
                         val recopilatoriosActualizado = currentState.recopilatorios.map { recopilatorio ->
                             if (recopilatorio.id == recopilatorioId) {
-                                recopilatorio.copy(recuerdos = recuerdosActuales)
+                                recopilatorio.copy(recuerdos = recuerdosActuales.map {
+                                    if (it.id == actualizado.id) actualizado else it
+                                })
+
                             } else {
                                 recopilatorio
                             }
+
                         }
+
                         val nuevosRecuerdosMap = currentState.recuerdosPorRecopilatorio.toMutableMap()
                         nuevosRecuerdosMap[recopilatorioId] = recuerdosCache[recopilatorioId] ?: emptyList()
 
                         currentState.copy(
-                            recopilatorios = recopilatoriosActualizado,recuerdosPorRecopilatorio = nuevosRecuerdosMap
+                            recopilatorios = recopilatoriosActualizado,recuerdosPorRecopilatorio = nuevosRecuerdosMap.toMap()
                         )
                     } else {
                         currentState
@@ -246,16 +253,19 @@ class RecopilatoriosViewModel(
     fun eliminarRecuerdo(id: Long, recopilatorioId: Long) {
         viewModelScope.launch {
             try {
-                val success = recuerdoRepository.eliminarRecuerdo(id)
-                if (success) {
+                val success = async {
+                    recuerdoRepository.eliminarRecuerdo(id)
+                }
+                if (success.await()) {
                     val recuerdosActuales = recuerdosCache[recopilatorioId] ?: emptyList()
+
                     recuerdosCache[recopilatorioId] = recuerdosActuales.filter { it.id != id }
 
                     _uiState.update { currentState ->
                         if (currentState is RecopilatoriosUiState.Success) {
                             val recopilatoriosActualizado = currentState.recopilatorios.map { recopilatorio ->
                                 if (recopilatorio.id == recopilatorioId) {
-                                    recopilatorio.copy(recuerdos = recuerdosActuales)
+                                    recopilatorio.copy(recuerdos = recuerdosActuales.filter { it.id != id })
                                 } else {
                                     recopilatorio
                                 }
@@ -263,7 +273,7 @@ class RecopilatoriosViewModel(
                             val nuevosRecuerdosMap = currentState.recuerdosPorRecopilatorio.toMutableMap()
                             nuevosRecuerdosMap[recopilatorioId] = recuerdosCache[recopilatorioId] ?: emptyList()
 
-                            currentState.copy(recopilatorios = recopilatoriosActualizado, recuerdosPorRecopilatorio = nuevosRecuerdosMap)
+                            currentState.copy(recopilatorios = recopilatoriosActualizado, recuerdosPorRecopilatorio = nuevosRecuerdosMap.toMap())
                         } else {
                             currentState
                         }

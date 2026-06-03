@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Emoji(
-    val unicode: String
+    val unicode: String?
 )
