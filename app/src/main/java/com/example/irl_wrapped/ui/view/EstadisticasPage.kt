@@ -1,5 +1,6 @@
 package com.example.irl_wrapped.ui.view
 
+import android.util.Log
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +39,10 @@ fun EstadisticasPage(
     personaFrecuencia: Map<String, Int>,
     onBack: () -> Unit
 ){
+    if (recopilatorio.recuerdos.isEmpty()){
+        Log.d("EstadisticasPage", "No hay datos")
+        onBack()
+    }
     var counter by remember { mutableStateOf(0) }
     val random = Random.Default
     val randomList = mutableListOf(

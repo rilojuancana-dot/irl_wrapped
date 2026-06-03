@@ -35,6 +35,7 @@ import com.example.irl_wrapped.viewmodel.RecopilatoriosViewModel
 import androidx.core.graphics.createBitmap
 import com.example.irl_wrapped.model.Recopilatorio
 import com.example.irl_wrapped.ui.view.EstadisticasPage
+import com.example.irl_wrapped.ui.view.RecopilatorioCreatingForm
 
 @Composable
 fun AppNavigation(modifier: Modifier = Modifier){
@@ -64,6 +65,9 @@ fun AppNavigation(modifier: Modifier = Modifier){
                     Modifier.padding(paddingValues),
                     onNavigateToRecopilatorio = { id ->
                         navController.navigate("recopilatorio_page/$id")
+                    },
+                    onNavigateToCreating = {
+                        navController.navigate("recopilatorio_form")
                     }
                 )
             }
@@ -217,14 +221,30 @@ fun AppNavigation(modifier: Modifier = Modifier){
                 recopilatoriosViewModeliewModel.getRecopilatorioLugarFrecuencia(recopilatorioId)
                 recopilatoriosViewModeliewModel.getRecopilatorioEmojiFrecuencia(recopilatorioId)
                 recopilatoriosViewModeliewModel.getRecopilatorioPersonaFrecuencia(recopilatorioId)
-                EstadisticasPage(
-                    recopilatorio,
-                    recopilatoriosViewModeliewModel.temaFrecuencia.value?:emptyMap(),
-                    recopilatoriosViewModeliewModel.lugarFrecuencia.value?:emptyMap(),
-                    recopilatoriosViewModeliewModel.emojiFrecuencia.value?:emptyMap(),
-                    recopilatoriosViewModeliewModel.personaFrecuencia.value?:emptyMap(),
-                    onBack = { navController.popBackStack() }
+                if (!recopilatorio.recuerdos.isEmpty()) {
+                    EstadisticasPage(
+                        recopilatorio,
+                        recopilatoriosViewModeliewModel.temaFrecuencia.value ?: emptyMap(),
+                        recopilatoriosViewModeliewModel.lugarFrecuencia.value ?: emptyMap(),
+                        recopilatoriosViewModeliewModel.emojiFrecuencia.value ?: emptyMap(),
+                        recopilatoriosViewModeliewModel.personaFrecuencia.value ?: emptyMap(),
+                        onBack = { navController.popBackStack() }
 
+                    )
+                }
+                else{
+                    StatsError(onBack = {navController.popBackStack()})
+                }
+            }
+            composable(
+                route = "recopilatorio_form"
+            ) {
+                RecopilatorioCreatingForm(
+                    onSave = {recopilatorio ->
+
+                        recopilatoriosViewModeliewModel.crearRecopilatorio(recopilatorio, 1L)
+                    },
+                    onBack = {navController.popBackStack()}
                 )
             }
         }

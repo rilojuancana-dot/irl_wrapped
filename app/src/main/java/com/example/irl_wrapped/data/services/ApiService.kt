@@ -39,7 +39,7 @@ interface ApiService {
     @DELETE("api/temas/{id}")
     suspend fun eliminarTema(@Path("id") id: Int): Boolean
 
-    @POST("add")
+    @POST("api/recopilatorios/add")
     suspend fun crearRecopilatorio(
         @Query("nombre") nombre: String,
         @Query("usuarioId") usuarioId: Long
