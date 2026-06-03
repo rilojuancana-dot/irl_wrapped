@@ -181,7 +181,7 @@ fun RecuerdoPage(recuerdo: Recuerdo?, onSave: (Recuerdo) -> Unit,  onNavigateBac
                                 Tema(temaVar),
                                 Emoji(emoji),
                                 Lugar(lugar),
-                                personas.split(" ").map { Persona(it) },
+                                personas.split(",").map { Persona(it) },
                                 recuerdo?.imageUrl
                             ))
                             onNavigateBack()
