@@ -2,6 +2,7 @@ package com.example.irl_wrapped.ui.view.components
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -161,9 +162,13 @@ fun AppNavigation(modifier: Modifier = Modifier){
                     recuerdo = recuerdo,
                     onSave = { recuerdoActualizado : Recuerdo ->
                         if (recuerdoId == 0L) {
+                            Log.d("RecuerdoPage", "======================== CREAR RECUERDO")
                             recopilatoriosViewModeliewModel.crearRecuerdo(recuerdoActualizado, recopilatorioId)
                             cameraViewModel.clearCapturedImage()
                         } else {
+                            Log.d("RecuerdoPage", "======================== ACTUALIZAR RECUERDO")
+                            Log.d("RecuerdoPage", "======================== ${recuerdoActualizado.name}")
+
                             recopilatoriosViewModeliewModel.actualizarRecuerdo(recuerdoActualizado.id,recuerdoActualizado, recopilatorioId)
                             cameraViewModel.clearCapturedImage()
                         }
@@ -194,7 +199,7 @@ fun AppNavigation(modifier: Modifier = Modifier){
                     onTakePhoto = { cameraViewModel.capturePhoto() },
                     onClear = {cameraViewModel.clearCapturedImage()},
                     onSavePhoto = { navController.navigate("recuerdo_page/${backStackEntry.arguments?.getLong("id")?:0L}/${0}")},
-                    onNavigateBack = { navController.popBackStack() }
+                    onNavigateBack = { navController.navigate("recopilatorio_page/${backStackEntry.arguments?.getLong("id")?:0L}") }
                 )
             }
 

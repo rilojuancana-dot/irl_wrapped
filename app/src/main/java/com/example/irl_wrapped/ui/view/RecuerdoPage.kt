@@ -54,18 +54,19 @@ fun RecuerdoPage(recuerdo: Recuerdo?, onSave: (Recuerdo) -> Unit,  onNavigateBac
     var name by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
     var lugar by remember { mutableStateOf("") }
-    var temaVar by remember { mutableStateOf("") }
+    var temaVar by remember { mutableStateOf("Tema") }
     var emoji by remember { mutableStateOf("") }
     var personas by remember { mutableStateOf("") }
     if(recuerdo != null){
+        name = recuerdo.name
         descripcion = recuerdo.descripcion
-        lugar = recuerdo.lugar.name
-        temaVar = recuerdo.tema.name
-        emoji = recuerdo.emoji.unicode
+        lugar = recuerdo.lugar.name?:""
+        temaVar = recuerdo.tema.name?:""
+        emoji = recuerdo.emoji.unicode?:""
         personas = recuerdo.personas.joinToString{"${it.name} "}
     }
 
-    Log.d("RecuerdoPage", "Temas: ${temas.joinToString { it.name }}")
+    Log.d("RecuerdoPage", "Temas: ${temas.joinToString { it.name?:"" }}")
     Log.d("Imagen en RecuerdoPage", "Imagen: ${imagen.height}")
     Scaffold(
         topBar = {
@@ -151,9 +152,9 @@ fun RecuerdoPage(recuerdo: Recuerdo?, onSave: (Recuerdo) -> Unit,  onNavigateBac
                         ) {
                             temas.forEach { tema ->
                                 DropdownMenuItem(
-                                    text = { Text(text = tema.name) },
+                                    text = { Text(text = tema.name ?: "") },
                                     onClick = {
-                                        temaVar = tema.name
+                                        temaVar = tema.name ?:""
                                         expanded = false
                                     }
                                 )
