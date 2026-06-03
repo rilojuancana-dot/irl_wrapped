@@ -2,7 +2,7 @@
 
  
 Esta es una aplicación móvil que permite gestionar fotos y vivencias en espacios de tiempo que elija el usuario, siendo indicada para un viaje, recopilatorios mensuales o anuales, entre otros. Para ello, 
-se divide en dos partes: la creación de recopilaciones y la generación de resúmenes. Además, para hacer la experiencia al usuario más cómoda se usará la lógica de guardado de datos offline-first.
+se divide en dos partes: la creación de recopilaciones y la generación de resúmenes.
 
 ## Requisitos previos
 
